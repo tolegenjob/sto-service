@@ -42,3 +42,7 @@ spring:
     topic:
       events: taskflow.events
       dlq: taskflow.dlq
+
+jwt:
+  secret: ${JWT_SECRET}
+  expirationMs: ${JWT_EXPIRATION_MS}
