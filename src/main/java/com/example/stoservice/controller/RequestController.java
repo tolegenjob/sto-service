@@ -9,6 +9,8 @@ import com.example.stoservice.entity.Request;
 import com.example.stoservice.enums.RequestStatus;
 import com.example.stoservice.security.AccessService;
 import com.example.stoservice.service.RequestService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/requests")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class RequestController {
 
@@ -30,7 +33,7 @@ public class RequestController {
     @PostMapping
     public ResponseEntity<RequestCreateResponse> createRequest(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody RequestCreateRequest createRequest
+            @RequestBody @Valid RequestCreateRequest createRequest
     ) {
         RequestCreateResponse response = RequestCreateResponse.toDto(
                 requestService.createRequest(userDetails, createRequest));
@@ -41,7 +44,7 @@ public class RequestController {
     public ResponseEntity<RequestUpdateResponse> updateRequestStatus(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody RequestUpdateRequest updateRequest,
+            @RequestBody @Valid RequestUpdateRequest updateRequest,
             @RequestParam(required = false) Long mechanicId
     ) {
         if (!accessService.canUpdateRequest(userDetails, updateRequest.status(), id)) {

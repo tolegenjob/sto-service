@@ -3,6 +3,7 @@ package com.example.stoservice.controller;
 import com.example.stoservice.dto.response.StatusHistoryResponse;
 import com.example.stoservice.entity.StatusHistory;
 import com.example.stoservice.service.StatusHistoryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/status-histories")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class StatusHistoryController {
 

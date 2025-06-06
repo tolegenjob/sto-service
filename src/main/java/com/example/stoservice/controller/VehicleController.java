@@ -7,6 +7,8 @@ import com.example.stoservice.dto.response.VehicleResponse;
 import com.example.stoservice.dto.response.VehicleUpdateResponse;
 import com.example.stoservice.security.AccessService;
 import com.example.stoservice.service.VehicleService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/vehicles")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class VehicleController {
 
@@ -28,7 +31,7 @@ public class VehicleController {
     @PostMapping
     public ResponseEntity<VehicleCreateResponse> createVehicle(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody VehicleCreateRequest createRequest
+            @RequestBody @Valid VehicleCreateRequest createRequest
     ) {
         VehicleCreateResponse response = VehicleCreateResponse.toDto(
                 vehicleService.createVehicle(userDetails, createRequest));
@@ -39,7 +42,7 @@ public class VehicleController {
     public ResponseEntity<VehicleUpdateResponse> updateVehicleById(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @RequestBody VehicleUpdateRequest updateRequest
+            @RequestBody @Valid VehicleUpdateRequest updateRequest
     ) {
         if (!accessService.canAccessVehicle(userDetails, id)) {
             return ResponseEntity.status(403).build();

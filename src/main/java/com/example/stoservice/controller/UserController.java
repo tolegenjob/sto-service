@@ -9,6 +9,8 @@ import com.example.stoservice.dto.response.UserUpdateResponse;
 import com.example.stoservice.enums.UserRole;
 import com.example.stoservice.security.AccessService;
 import com.example.stoservice.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -30,7 +33,7 @@ public class UserController {
     @PostMapping("/{role}")
     public ResponseEntity<UserCreateResponse> createUser(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody RegisterRequest registerRequest,
+            @RequestBody @Valid RegisterRequest registerRequest,
             @PathVariable UserRole role
     ) {
         if (!accessService.canCreateUser(userDetails, role)) {
@@ -42,7 +45,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserUpdateResponse> updateUser(
-            @RequestBody UserUpdateRequest updateRequest,
+            @RequestBody @Valid UserUpdateRequest updateRequest,
             @PathVariable Long id
     ) {
         UserUpdateResponse response = UserUpdateResponse.toDto(userService.updateUser(id, updateRequest));
@@ -52,7 +55,7 @@ public class UserController {
     @PutMapping("/me")
     public ResponseEntity<UserUpdateResponse> updateMe(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UpdateMeRequest updateRequest
+            @RequestBody @Valid UpdateMeRequest updateRequest
     ) {
         UserUpdateResponse response = UserUpdateResponse.toDto(userService.updateMe(userDetails, updateRequest));
         return ResponseEntity.ok(response);
