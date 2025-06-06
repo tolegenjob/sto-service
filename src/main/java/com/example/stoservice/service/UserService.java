@@ -33,7 +33,7 @@ public class UserService {
         user.setLastName(request.lastName());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setPhoneNumber(request.phoneNumber());
+        user.setPhoneNumber(request.phoneNumber().replaceAll("\\s+", ""));
         user.setRole(role);
         User saved = userRepository.save(user);
         log.info("User created with id: {}", saved);
@@ -44,7 +44,7 @@ public class UserService {
     public User updateUser(Long id, UserUpdateRequest request) {
         User user = findOrThrow(userRepository, id, "User");
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setPhoneNumber(request.phoneNumber());
+        user.setPhoneNumber(request.phoneNumber().replaceAll("\\s+", ""));
         user.setRole(request.role());
         User saved = userRepository.save(user);
         log.info("User updated with id: {}", saved.getId());
@@ -55,7 +55,7 @@ public class UserService {
     public User updateMe(UserDetails userDetails, UpdateMeRequest request) {
         User user = findUserByEmailOrThrow(userRepository, userDetails.getUsername());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setPhoneNumber(request.phoneNumber());
+        user.setPhoneNumber(request.phoneNumber().replaceAll("\\s+", ""));
         User saved = userRepository.save(user);
         log.info("User updated itself with id: {}", saved.getId());
         return saved;
