@@ -5,7 +5,6 @@ public record VehicleCreateRequest(
         String model,
         String color,
         String licensePlate,
-        int year,
-        Long ownerId
+        int year
 ) {
 }

@@ -1,0 +1,11 @@
+CREATE TABLE requests (
+    id BIGSERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    current_status VARCHAR(255) NOT NULL DEFAULT 'NEW',
+    client_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    mechanic_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    vehicle_id BIGINT NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE
+);

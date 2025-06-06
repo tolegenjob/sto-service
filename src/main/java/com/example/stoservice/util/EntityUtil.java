@@ -1,10 +1,8 @@
 package com.example.stoservice.util;
 
 import com.example.stoservice.entity.User;
-import com.example.stoservice.entity.Vehicle;
 import com.example.stoservice.exception.NotFoundException;
 import com.example.stoservice.repository.UserRepository;
-import com.example.stoservice.repository.VehicleRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public class EntityUtil {
@@ -21,9 +19,4 @@ public class EntityUtil {
                         new NotFoundException("User with email %s not found".formatted(email)));
     }
 
-    public static Vehicle findVehicleByOwnerOrThrow(VehicleRepository vehicleRepository, User owner) {
-        return vehicleRepository.findByOwner(owner)
-                .orElseThrow(() ->
-                        new NotFoundException("Vehicle with owner id %d not found".formatted(owner.getId())));
-    }
 }

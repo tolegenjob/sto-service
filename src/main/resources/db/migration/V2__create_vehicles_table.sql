@@ -1,0 +1,11 @@
+CREATE TABLE vehicles (
+    id BIGSERIAL PRIMARY KEY,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITHOUT TIME ZONE,
+    brand VARCHAR(255) NOT NULL,
+    model VARCHAR(255) NOT NULL,
+    color VARCHAR(255) NOT NULL,
+    license_plate VARCHAR(255) NOT NULL,
+    year INTEGER NOT NULL,
+    owner_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);

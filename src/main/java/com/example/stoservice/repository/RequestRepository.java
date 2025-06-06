@@ -12,11 +12,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
-    Page<Request> findByClient(User client, Pageable pageable);
+    Page<Request> findAllRequestsByClient(User client, Pageable pageable);
 
-    Page<Request> findByCurrentStatus(RequestStatus currentStatus, Pageable pageable);
+    Page<Request> findAllRequestsByCurrentStatus(RequestStatus currentStatus, Pageable pageable);
 
-    Page<Request> findByMechanic(User mechanic, Pageable pageable);
+    Page<Request> findAllRequestsByMechanic(User mechanic, Pageable pageable);
 
     @Override
     @NonNull

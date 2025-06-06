@@ -1,11 +1,15 @@
 package com.example.stoservice.dto.event;
 
-import com.example.stoservice.dto.request.RequestUpdateRequest;
 import com.example.stoservice.enums.RequestStatus;
 
+import java.time.LocalDateTime;
+
 public record StatusEvent(
+        Long requestId,
         RequestStatus fromStatus,
-        RequestUpdateRequest updateRequest,
-        Long changedById
+        RequestStatus toStatus,
+        String reason,
+        Long changedById,
+        LocalDateTime timestamp
 ) {
 }

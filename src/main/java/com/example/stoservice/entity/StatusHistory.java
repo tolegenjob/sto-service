@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -26,7 +28,10 @@ public class StatusHistory extends BaseEntity {
     @JoinColumn(name = "request_id")
     private Request request;
 
-    @ManyToOne
-    @JoinColumn(name = "changed_by_id")
-    private User changedBy;
+    @Column(nullable = false)
+    private Long changedById;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
 }

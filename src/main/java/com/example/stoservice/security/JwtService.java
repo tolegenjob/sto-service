@@ -14,7 +14,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -58,11 +57,6 @@ public class JwtService {
     private SecretKey getSigningKey() {
         var key = jwtProperties.secret().getBytes();
         return Keys.hmacShaKeyFor(key);
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        var claims = extractAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaimsFromToken(String token) {

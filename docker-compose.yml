@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres
-    container_name: postgres
+    container_name: sto-service-postgres
     restart: unless-stopped
     env_file:
       - .env
@@ -18,7 +18,7 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper
-    container_name: zookeeper
+    container_name: sto-service-zookeeper
     ports:
       - "2181:2181"
     environment:
@@ -29,23 +29,22 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka
-    container_name: kafka
+    container_name: sto-service-kafka
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
-      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_HOST://kafka:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_HOST
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - network
 
-  sto-service:
+  application:
     build: .
     depends_on:
       - postgres
@@ -58,6 +57,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${DB_NAME}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION_MS=${JWT_EXPIRATION_MS}
     restart: unless-stopped
     networks:
       - network

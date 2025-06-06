@@ -28,20 +28,20 @@ spring:
         max-page-size: 100
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       enable-auto-commit: false
       auto-offset-reset: earliest
-      dlq-group-id: dlq-event-consumer-group
-      events-group-id: event-consumer-group
+      events-group-id: events-consumer-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.example.stoservice.dto.event
     topic:
-      events: taskflow.events
-      dlq: taskflow.dlq
+      events: sto-service.events
 
 jwt:
   secret: ${JWT_SECRET}

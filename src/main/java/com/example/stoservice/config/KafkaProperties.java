@@ -8,11 +8,9 @@ public record KafkaProperties(
         String bootstrapServers,
         Consumer consumer
 ) { public record Topic(
-        String events,
-        String dlq
+        String events
     ) {}
     public record Consumer(
-            String dlqGroupId,
             String eventsGroupId
     ) {}
 }

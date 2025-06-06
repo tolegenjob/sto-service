@@ -5,7 +5,6 @@ import com.example.stoservice.entity.Request;
 import com.example.stoservice.entity.StatusHistory;
 import com.example.stoservice.repository.RequestRepository;
 import com.example.stoservice.repository.StatusHistoryRepository;
-import com.example.stoservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,27 +21,31 @@ public class StatusHistoryService {
 
     private final StatusHistoryRepository statusHistoryRepository;
     private final RequestRepository requestRepository;
-    private final UserRepository userRepository;
 
     @Transactional
     public void createStatusHistory(StatusEvent statusEvent) {
         StatusHistory statusHistory = new StatusHistory();
         statusHistory.setFromStatus(statusEvent.fromStatus());
-        statusHistory.setToStatus(statusEvent.updateRequest().status());
-        statusHistory.setReason(statusEvent.updateRequest().reason());
+        statusHistory.setToStatus(statusEvent.toStatus());
+        statusHistory.setReason(statusEvent.reason());
         statusHistory.setRequest(
-                findOrThrow(requestRepository, statusEvent.updateRequest().id(), "Request"));
-        statusHistory.setChangedBy(
-                findOrThrow(userRepository, statusEvent.changedById(), "User"));
+                findOrThrow(requestRepository, statusEvent.requestId(), "Request"));
+        statusHistory.setChangedById(statusEvent.changedById());
+        statusHistory.setTimestamp(statusEvent.timestamp());
         StatusHistory saved = statusHistoryRepository.save(statusHistory);
         log.info("Saved statusHistory with id: {}", saved.getId());
     }
 
     @Transactional(readOnly = true)
-    public Page<StatusHistory> getStatusHistoryByRequestId(Long requestId, Pageable pageable) {
+    public Page<StatusHistory> getAllStatusHistoriesByRequestId(Long requestId, Pageable pageable) {
         Request request = findOrThrow(requestRepository, requestId, "Request");
         log.info("Getting status history by request id: {}", requestId);
         return statusHistoryRepository.findByRequest(request, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<StatusHistory> getAllStatusHistories(Pageable pageable) {
+        log.info("Getting all status histories");
+        return statusHistoryRepository.findAll(pageable);
+    }
 }
