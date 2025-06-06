@@ -29,7 +29,7 @@ public record RegisterRequest(
 
         @NotBlank(message = "Phone number must not be blank")
         @Pattern(
-                regexp = "^\\+7(?:\\s*\\d){10}$",
+                regexp = "^\\+7(?:\\s?\\d){10}$",
                 message = "Phone number must start with +7 and consists of 10 digits"
         )
         String phoneNumber

@@ -14,8 +14,8 @@ public record UpdateMeRequest(
 
         @NotBlank(message = "Phone number must not be blank")
         @Pattern(
-                regexp = "^\\+7(?:\\s*\\d){10}$",
-                message = "Phone number must start with +7 и содержать ровно 10 цифр, между которыми допускаются любые пробелы"
+                regexp = "^\\+7(?:\\s?\\d){10}$",
+                message = "Phone number must start with +7 and consists of 10 digits"
         )
         String phoneNumber
 ) {
