@@ -25,7 +25,7 @@ public class AccessService {
 
     public boolean canAccessRequest(UserDetails userDetails, Long requestId) {
         User currentUser = findUserByEmailOrThrow(userRepository, userDetails.getUsername());
-        Request request = requestRepository.findById(requestId).orElseThrow();
+        Request request = findOrThrow(requestRepository, requestId, "Request");
         return switch (currentUser.getRole()) {
             case ADMIN, MANAGER -> true;
             case MECHANIC -> request.getMechanic() != null
