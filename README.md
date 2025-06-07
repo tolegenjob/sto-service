@@ -27,12 +27,27 @@
 
 ## 🛠️ Установка и запуск
 
+### Клонируйте репозиторий
+
 ```bash
-# Клонируйте репозиторий
 git clone https://github.com/tolegenjob/sto-service.git
 cd sto-service
+```
 
-# Запуск через Docker Compose
+### Настройте переменные окружения
+
+
+```env
+DB_NAME=your_db_name
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+JWT_SECRET=your_jwt_token
+JWT_EXPIRATION_MS=your_jwt_expiration_ms
+```
+
+### Сборка и Запуск через Docker Compose
+
+```bash
 ./gradlew clean build -x test
 docker-compose up --build
 ```
