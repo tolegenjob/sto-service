@@ -19,8 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.stoservice.util.EntityUtil.findOrThrow;
-import static com.example.stoservice.util.EntityUtil.findUserByEmailOrThrow;
+import static com.example.stoservice.util.EntityUtil.*;
 import static com.example.stoservice.util.MessageUtil.sendStatusEventToKafka;
 
 @Service
@@ -41,7 +40,7 @@ public class RequestService {
         request.setCurrentStatus(RequestStatus.NEW);
         User client = findUserByEmailOrThrow(userRepository, userDetails.getUsername());
         request.setClient(client);
-        request.setVehicle(findOrThrow(vehicleRepository, createRequest.vehicleId(), "Vehicle"));
+        request.setVehicle(findVehicleByLicensePlate(vehicleRepository, createRequest.licensePlate()));
         Request saved = requestRepository.save(request);
         log.info("Request created with id {}", saved.getId());
         return saved;
